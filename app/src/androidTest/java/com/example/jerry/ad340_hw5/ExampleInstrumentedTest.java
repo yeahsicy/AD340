@@ -1,6 +1,7 @@
-package com.example.jerry.ad340_hw4;
+package com.example.jerry.ad340_hw5;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -21,6 +22,7 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.jerry.ad340_hw4", appContext.getPackageName());
+        assertEquals("com.example.jerry.ad340_hw5", appContext.getPackageName());
+
     }
 }

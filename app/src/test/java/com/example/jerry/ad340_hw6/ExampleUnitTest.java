@@ -1,4 +1,4 @@
-package com.example.jerry.ad340_hw5;
+package com.example.jerry.ad340_hw6;
 
 import org.junit.Test;
 

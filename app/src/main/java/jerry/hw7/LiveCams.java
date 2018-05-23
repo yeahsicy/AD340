@@ -1,5 +1,5 @@
 
-package com.example.jerry.ad340_hw6;
+package jerry.hw7;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

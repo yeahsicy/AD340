@@ -17,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -82,20 +83,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
         service.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, listener);
-        CurLocation = LocationServices.getFusedLocationProviderClient(this).getLastLocation().getResult();
+        //CurLocation = LocationServices.getFusedLocationProviderClient(this).getLastLocation().getResult();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        LatLng seattle = new LatLng(47.62,-122.35);
-        // Add a marker in Sydney and move the camera
-        mMap.addMarker(new MarkerOptions().position(seattle).title("My Location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(seattle,12));
+        LatLng seattle = new LatLng(47.62, -122.35);
+        //my mock location
+        mMap.addMarker(new MarkerOptions().position(seattle)).setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(seattle, 12));
         //add markers
         addCams();
         //click a marker
+        mMap.setInfoWindowAdapter(new MyInfoWindowAdapter(getApplicationContext()));
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -111,8 +113,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.v("requestPermission", "permission.ACCESS_FINE_LOCATION");
     }
 
-    void addCams(){
+    void addCams() {
         List<Feature> features = cams.getFeatures();
+        for (Feature feature : features) {
+            AddACam(feature);
+        }
+    }
 
+    void AddACam(Feature feature) {
+        List<Double> pointCoordinate = feature.getPointCoordinate();
+        Camera camera = feature.getCameras().get(0);
+        String description = camera.getDescription();
+        String type = camera.getType();
+        String imageUrl = type.equals("sdot") ? "http://www.seattle.gov/trafficcams/images/" : "http://images.wsdot.wa.gov/nw/";
+        imageUrl += camera.getImageUrl();
+        Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(pointCoordinate.get(0), pointCoordinate.get(1))));
+        infoObj infoObj = new infoObj();
+        infoObj.title = description;
+        infoObj.url = imageUrl;
+        marker.setTag(infoObj);
     }
 }
